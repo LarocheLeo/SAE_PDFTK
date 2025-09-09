@@ -19,7 +19,9 @@ PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion 
 
 ## Les commandes 
 
-fes
+#### Concaténation (fusion) 
+
+#### Extraction 
 
 ## Les sources 
 
