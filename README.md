@@ -13,11 +13,11 @@ Ce dernier existe en plusieurs versions :
 
 
 
-## Les commandes :
+## Les commandes 
 
 
 
-## Les sources :
+## Les sources 
 
 - https://doc.ubuntu-fr.org/pdftk
 - https://www.it-connect.fr/fusionner-des-pdf-sous-linux-avec-pdftk/
