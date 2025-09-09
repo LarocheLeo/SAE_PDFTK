@@ -2,16 +2,20 @@
 
 ## C'est quoi PDFTK ?
 
-PDF ToolKit ou PDFTK est un logiciel en ligne pouvant être utiliser sur macOS, windows ou encore Linux. Il permet de réaliser diverses opérations sur les fichiers PDF en ligne de commande.
+PDF ToolKit ou PDFTK est un logiciel qui est sortie le 14 juillet 2004 par Sid Steward. C'est un logiciel codée en C++ pouvant être utiliser sur macOS, windows ou encore Linux. Il permet de réaliser diverses opérations sur les fichiers PDF en ligne de commande.
 
 Ce dernier existe en plusieurs versions : 
 - PDFtk serveur, un outil en ligne de commande open source 
 - PDFtk Free, c'est un logiciel complêtement gratuit. on appelle aussi ce genre de logiciel un "gratuiciel". 
 - PDFtk Pro, c'est la version du logiciel qui est payante.
 
-## A quoi ça sert ?
+PDFTK est disponible en ligne de commande mais aussi, il peut être utiliser par une interface graphique. 
 
- frs
+Le 30 décembre 2017, Marc Vinyals développe un pdftk-java qui est un portage de PDFTK en java. Il est sera distribué par license GNU GPL.
+
+## À quoi ça sert ?
+
+PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion de pdf, la séparation, la sécurité, la compression et d'autre operation qu'on vera plus tard dans le point suivant. 
 
 ## Les commandes 
 
@@ -23,3 +27,4 @@ fes
 - https://www.it-connect.fr/fusionner-des-pdf-sous-linux-avec-pdftk/
 - https://debian-facile.org/doc:editeurs:pdftk
 - https://fr.wikipedia.org/wiki/PDFtk
+- https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/
