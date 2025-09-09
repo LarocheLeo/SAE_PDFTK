@@ -6,15 +6,15 @@ read -p "Entrez le(s) nom(s) de fichier(s) PDF (séparés par des espaces) ou ta
 read -p "saissez le(s) page(s) à récupérer :" pages #on récupérer les pages que l'utilisateur veux 
 read -p "comment se nommera le fichier final ?" pdf_final #demander le nom que l'user veut pour le fichier
 
-if [[ "${input_files[0]}" == "all" ]]
+if [[ "${input_files[0]}" == "all" ]] #un if pour voir si, nous devons sélection tout les pdfs ou seulement certains.
 then
     pdfs=( *.pdf )
 else
     pdfs=( "${input_files[@]}" )
 fi
 
-nbr_fichier=${#pdfs[@]} #on compte le nombre de pdf qu'on récupère
 
+nbr_fichier=${#pdfs[@]} #on compte le nombre de pdf qu'on récupère
 
 
 for (( i=0; i<nbr_fichier; i++ )) #fonction qui permet de récupéré les pages voulus 
