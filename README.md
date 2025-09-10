@@ -25,6 +25,7 @@ PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion 
 
 ## Les sources : 
 
+
 - https://doc.ubuntu-fr.org/pdftk
 - https://www.it-connect.fr/fusionner-des-pdf-sous-linux-avec-pdftk/
 - https://debian-facile.org/doc:editeurs:pdftk
