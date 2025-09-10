@@ -17,13 +17,13 @@ Le 30 décembre 2017, Marc Vinyals développe un pdftk-java qui est un portage d
 
 PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion de pdf, la séparation, la sécurité, la compression et d'autre operation qu'on vera plus tard dans le point suivant. 
 
-## Les commandes 
+## Les commandes : 
 
 #### Concaténation (fusion) 
 
 #### Extraction 
 
-## Les sources 
+## Les sources : 
 
 - https://doc.ubuntu-fr.org/pdftk
 - https://www.it-connect.fr/fusionner-des-pdf-sous-linux-avec-pdftk/
