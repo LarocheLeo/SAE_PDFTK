@@ -27,7 +27,10 @@ Setup.sh permet de vérifier si les paquets qui sont vitale pour notre programme
 
 ```
 #!/bin/bash
+```
+Cette ligne permet au system de lançer le script en bash. Il est dans tous les scripts bash. 
 
+```
 echo "=== Vérification des dépendances pour le programme PDF ==="
 
 # Liste des paquets/commandes nécessaires
@@ -37,47 +40,50 @@ packages=(
     ["pdfgrep"]="pdfgrep"
     ["pdfinfo"]="poppler-utils"
 )
-
+```
+```
 missing=()
 
-# Vérifier chaque commande
+# Vérification de chaque commande
 for cmd in "${!packages[@]}"; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         missing+=("${packages[$cmd]}")
         echo "La commande '$cmd' est manquante."
     fi
 done
-
-# Installer les paquets manquants si nécessaire
+```
+```
+# Installations des paquets manquants si nécessaire
 if [ ${#missing[@]} -eq 0 ]; then
     echo "Toutes les dépendances sont déjà installées."
 else
     echo "Les paquets suivants vont être installés : ${missing[*]}"
-    
-    # Demander confirmation
-    read -p "Voulez-vous continuer avec l'installation ? [o/N] : " choice
-    if [[ "$choice" =~ ^[oO]$ ]]; then
-        sudo apt update
-        sudo apt install -y "${missing[@]}"
-        echo "Installation terminée."
-    else
-        echo "Installation annulée. Le programme ne fonctionnera pas sans ces paquets."
-        exit 1
-    fi
 fi
+```
+```
+
+sudo apt update
+sudo apt install -y "${missing[@]}"
+echo "Installation terminée."
+
 ```
 
 ## progragmme_final.sh
 
 ### Rôle 
 
-
+programme_final est la solution de la demande par rapport au pdf, il permet d'extraire les informations d'un pdf ou de plusieurs et de les mettres dans un pdf nomable appart. 
 
 ### Code 
 
 ```
 #!/bin/bash
 
+```
+
+Cette ligne permet au system de lançer le script en bash. Il est dans tous les scripts bash. 
+
+```
 # Liste des paquets/commandes nécessaires
 declare -A packages
 packages=( 
@@ -93,9 +99,13 @@ for cmd in "${!packages[@]}"; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         missing+=("${packages[$cmd]}")
         echo "La commande '$cmd' est manquante. Veulliez lancer setup.sh pour résoudre le problème"
+        exit 1
     fi
 done
+```
+Cette partie fait exactement, comme ce qui est présenter dans le point Setup.sh. Cependant au lieu 
 
+```
 # Demander les fichiers PDF
 read -p "Entrez le(s) nom(s) de fichier(s) PDF (séparés par des espaces) ou tapez 'all' pour tout prendre : " -a input_files
 
@@ -104,22 +114,26 @@ read -p "Voulez-vous extraire par (p)ages ou par (m)ot-clé ? [p/m] : " mode
 
 # Nom du fichier final
 read -p "Comment se nommera le fichier final ? " pdf_final
-
+```
+```
 # Si l'utilisateur veut tous les PDFs du dossier
 if [[ "${input_files[0]}" == "all" ]]; then
     pdfs=( *.pdf )
 else
     pdfs=( "${input_files[@]}" )
 fi
-
+```
+```
 # Vérifier l'extension du fichier final
 if [[ "$pdf_final" != *.pdf ]]; then
     pdf_final="${pdf_final}.pdf"
 fi
-
+```
+```
 # Tableau pour stocker les PDFs temporaires
 pdf_creer=()
-
+```
+```
 # Mode extraction par pages
 if [[ "$mode" == "p" ]]; then
     read -p "Saisissez le(s) page(s) à récupérer (ex: 1-3 5 7) : " pages
@@ -163,7 +177,8 @@ if [[ "$mode" == "p" ]]; then
         fi
     done
 fi
-
+```
+```
 # Mode extraction par mot-clé avec pdfgrep
 if [[ "$mode" == "m" ]]; then
     read -p "Entrez le mot-clé à rechercher : " keyword
@@ -193,7 +208,8 @@ if [[ "$mode" == "m" ]]; then
         fi
     done
 fi
-
+```
+```
 # Fusionner les fichiers extraits
 if [[ ${#pdf_creer[@]} -gt 0 ]]; then
     pdftk "${pdf_creer[@]}" cat output "$pdf_final" 2>/dev/null

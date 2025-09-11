@@ -11,12 +11,19 @@ packages=(
 missing=()
 
 # Vérifier chaque commande
+
 for cmd in "${!packages[@]}"; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         missing+=("${packages[$cmd]}")
-        echo "La commande '$cmd' est manquante. Veulliez lancer setup.sh pour résoudre le problème"
     fi
 done
+
+if [ ${#missing[@]} -gt 0 ]; then
+    echo "⚠ Les commandes suivantes sont manquantes : ${missing[*]}"
+    echo "Veuillez lancer setup.sh pour installer les dépendances."
+    exit 1
+fi
+
 
 # Demander les fichiers PDF
 read -p "Entrez le(s) nom(s) de fichier(s) PDF (séparés par des espaces) ou tapez 'all' pour tout prendre : " -a input_files
