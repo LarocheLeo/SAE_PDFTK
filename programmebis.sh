@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Liste des paquets/commandes nécessaires
+declare -A packages
+packages=( 
+    ["pdftk"]="pdftk"
+    ["pdfgrep"]="pdfgrep"
+    ["pdfinfo"]="poppler-utils"
+)
+
+missing=()
+
+# Vérifier chaque commande
+for cmd in "${!packages[@]}"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        missing+=("${packages[$cmd]}")
+        echo "La commande '$cmd' est manquante. Veulliez lancer setup.sh pour résoudre le problème"
+    fi
+done
+
 # Demander les fichiers PDF
 read -p "Entrez le(s) nom(s) de fichier(s) PDF (séparés par des espaces) ou tapez 'all' pour tout prendre : " -a input_files
 
@@ -29,42 +47,85 @@ if [[ "$mode" == "p" ]]; then
     read -p "Saisissez le(s) page(s) à récupérer (ex: 1-3 5 7) : " pages
 
     for pdf_input in "${pdfs[@]}"; do
+        total_pages=$(pdfinfo "$pdf_input" 2>/dev/null | grep "Pages:" | awk '{print $2}')
+
+        adjusted_pages=""
+        for part in $pages; do
+            if [[ "$part" =~ ^([0-9]+)-([0-9]+)$ ]]; then
+                start=${BASH_REMATCH[1]}
+                end=${BASH_REMATCH[2]}
+                # Ajuster la borne max
+                if (( end > total_pages )); then
+                    end=$total_pages
+                fi
+                # Ajouter seulement si la plage est valide
+                if (( start <= end && start <= total_pages )); then
+                    adjusted_pages+="$start-$end "
+                fi
+            else
+                # Page unique
+                if (( part <= total_pages )); then
+                    adjusted_pages+="$part "
+                fi
+            fi
+        done
+
+        if [[ -z "$adjusted_pages" ]]; then
+            echo "Aucune page valide à extraire dans $pdf_input"
+            continue
+        fi
+
         pdf_output="temp_${pdf_input%.pdf}.pdf"
-        pdftk "$pdf_input" cat $pages output "$pdf_output"
-        echo "Pages $pages de $pdf_input extraites vers $pdf_output"
-        pdf_creer+=("$pdf_output")
+        pdftk "$pdf_input" cat $adjusted_pages output "$pdf_output" 2>/dev/null
+        if [[ -f "$pdf_output" ]]; then
+            echo "Pages $adjusted_pages de $pdf_input extraites vers $pdf_output"
+            pdf_creer+=("$pdf_output")
+        else
+            echo "Erreur : impossible d’extraire depuis $pdf_input"
+        fi
     done
 fi
 
 # Mode extraction par mot-clé avec pdfgrep
 if [[ "$mode" == "m" ]]; then
     read -p "Entrez le mot-clé à rechercher : " keyword
+    read -p "Ignorer les majuscules/minuscules ? [o/n] : " ignore_case
+
+    if [[ "$ignore_case" == "o" || "$ignore_case" == "O" ]]; then
+        grep_option="-i"
+    else
+        grep_option=""
+    fi
 
     for pdf_input in "${pdfs[@]}"; do
         echo "Recherche du mot-clé '$keyword' dans $pdf_input..."
-        
-        # Récupérer les numéros de pages où le mot apparaît
-        pages=$(pdfgrep -n "$keyword" "$pdf_input" | cut -d: -f1 | sort -n | uniq)
+
+        pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)
 
         if [[ -z "$pages" ]]; then
-            echo "⚠ Aucun résultat trouvé dans $pdf_input"
+            echo "Aucun résultat trouvé dans $pdf_input"
             continue
         fi
 
-        echo "Mot-clé trouvé aux pages : $pages"
         pdf_output="temp_${pdf_input%.pdf}.pdf"
-        pdftk "$pdf_input" cat $pages output "$pdf_output"
-        echo "Pages contenant '$keyword' extraites vers $pdf_output"
-        pdf_creer+=("$pdf_output")
+        pdftk "$pdf_input" cat $pages output "$pdf_output" 2>/dev/null
+        if [[ -f "$pdf_output" ]]; then
+            echo "Pages $pages de $pdf_input extraites vers $pdf_output"
+            pdf_creer+=("$pdf_output")
+        fi
     done
 fi
 
 # Fusionner les fichiers extraits
 if [[ ${#pdf_creer[@]} -gt 0 ]]; then
-    pdftk "${pdf_creer[@]}" cat output "$pdf_final"
-    echo "✅ Fichier final créé : $pdf_final"
-    rm "${pdf_creer[@]}" # suppression des fichiers temporaires
+    pdftk "${pdf_creer[@]}" cat output "$pdf_final" 2>/dev/null
+    echo "Création du fichier en cours..."
+    echo "Fichier final créé : $pdf_final"
+    # Supprimer seulement si le fichier existe
+    for f in "${pdf_creer[@]}"; do
+        [[ -f "$f" ]] && rm "$f"
+    done
 else
-    echo "❌ Aucun fichier n’a été généré (vérifiez vos mots-clés ou pages)."
+    echo "Aucun fichier n’a été généré (vérifiez vos mots-clés ou pages)."
 fi
 
