@@ -268,20 +268,8 @@ Test la variable pour savoir si elle est vide. Puis si aucune page que l'utilisa
     done
 fi
 ```
-Puis on, vérifie si tout c'est bien dérouller. Si le fichier temporaire c'est bien créer. sinon on affiche une erreur. 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Puis on, vérifie si tout c'est bien dérouller. Si le fichier temporaire c'est bien créer. sinon on affiche une erreur. Voici le dernier, segment de code qui termine l'option P. 
 
 
 ```
@@ -296,17 +284,37 @@ if [[ "$mode" == "m" ]]; then
         grep_option=""
     fi
 ```
+
+Maintenant, on va parler de l'option M qui va extraire les pages par mot-clé. 
+
+Déjà, si l'option est choisi. On demande le mot clé que l'utilisateur recherche et on demande si, il veut ignorer ou non les majuscules/minucusles. 
+Si, l'utilisateur choisi d'ignorer la différence de lettre. Alors on rajoutera l'arguement -i qui permettra de ne pas faire la diférence entre majuscules ou minuscules. Si c'est l'inverse, on fera la différence.
+
 ```
     for pdf_input in "${pdfs[@]}"; do
         echo "Recherche du mot-clé '$keyword' dans $pdf_input..."
 
         pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)
+```
+
+```for pdf_input in "${pdfs[@]}"; do``` boucle for pour regarder dans tout les fichiers pdfs. 
+```echo "Recherche du mot-clé '$keyword' dans $pdf_input..."``` on prévient ensuite l'utilisateur de quel mot clé, on cherche dans quel pdf. 
+```pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)``` puis on utilise pdfgrep, qui permet donc de chercher le mot-clé dans le fichier pdf. On affichie le numéro de page ou il apparait avec "-n". Si nous avions le grep_option avec "-i", on ignorer les majuscules et minuscules sinon, on fait la différence. on fait une redirection pour éviter les erreurs ou les messages parasite dans le terminal.
+```cut -d: -f1 ``` cette option permet de garder seulement les numéros de pages. 
+```sort -n``` puis avec cette option on trie les numéros de pages dans l’ordre croissant.
+```uniq``` puis avec cette option on supprime les doublons.
+
+
+```
 
         if [[ -z "$pages" ]]; then
             echo "Aucun résultat trouvé dans $pdf_input"
             continue
         fi
+```
+On teste la varialbe, pour savoir si elle est vide. si c'est le cas, on dit alors que nous avions rien trouver. 
 
+```
         pdf_output="temp_${pdf_input%.pdf}.pdf"
         pdftk "$pdf_input" cat $pages output "$pdf_output" 2>/dev/null
         if [[ -f "$pdf_output" ]]; then
@@ -316,6 +324,9 @@ if [[ "$mode" == "m" ]]; then
     done
 fi
 ```
+
+Puis comme dans l'option P, on vient renommer les pdfs pour enfaire des pdfs temporaires ou on mettra les pages extraites. Puis si tout c'est bien dérouler, on viens prévenir l'utilisateur. 
+
 ```
 # Fusionner les fichiers extraits
 if [[ ${#pdf_creer[@]} -gt 0 ]]; then
@@ -331,3 +342,18 @@ else
 fi
 ```
 
+```if [[ ${#pdf_creer[@]} -gt 0 ]]; then``` on regarde s'il y a au moins 1 fichier créer par rapport a l'extraction des pdfs via l'option p ou m/
+```pdftk "${pdf_creer[@]}" cat output "$pdf_final" 2>/dev/null``` puis avec cette commande, on va mettre chaque pdf temporaire créer dans le pdf final dont l'utilisateur a nommer au tout début. Et pour eviter les messages parasites, on fait une redirection des erreurs. 
+
+```
+echo "Création du fichier en cours..."
+echo "Fichier final créé : $pdf_final"  
+```
+Puis on informe l'utilisateur que sont fichier final c'est créer.
+```
+for f in "${pdf_creer[@]}"; do 
+    [[ -f "$f" ]] && rm "$f"
+```
+Et si tout c'est bien dérouler, on viens supprimer les fichiers temporaire générer par l'extraction des pages. Car ces derniers prenent de la places inutilement vu qu'on les fussionnes à la fin.
+
+```echo "Aucun fichier n’a été généré (vérifiez vos mots-clés ou pages)."``` de plus. si il na pas pu créer le ficher par manque de pdf ou autre le script le dira à l'utilisateur avec se message. 
