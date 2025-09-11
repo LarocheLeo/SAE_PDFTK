@@ -53,6 +53,11 @@ Ensuite, on définie le talbeau comme :
 | `["pdfinfo"]="poppler-utils"` | `pdfinfo` | `poppler-utils` | Ici la clé `pdfinfo` est la commande à tester. La valeur `poppler-utils` est le paquet qui contient `pdfinfo`.                 |
 
 
+Mais ? à quoi sert pdfgrep et le pdfinfo ? ces derniers sont utiliser dans le programme principal donc il sera plus détailler par la suite. Mais pour expliquer en quelque ligne : 
+
+- `pdfinfo` : récupère les informations d’un PDF, notamment le nombre total de pages, pour vérifier que les pages demandées existent avant extraction.
+- `pdfgrep` : cherche un mot-clé dans un PDF et retourne les numéros de pages où il apparaît, permettant d’extraire automatiquement ces pages.
+
 ```
 missing=()
 
@@ -64,14 +69,25 @@ for cmd in "${!packages[@]}"; do
     fi
 done
 ```
+```missing=()``` on créer un talbeau qui nous permettra de mettre tout les paquets manquants détécter lors de la vérification. 
+```for cmd in "${!packages[@]}"; do``` On parcours toutes les clés du tableau associatif de packages défini plutôt. ```"${!packages[@]}"``` permet de retourner toutes les clés du tableau. Puis ```cmd``` prend le reler pour chaque commande vérifier. 
+```if ! command -v "$cmd" >/dev/null 2>&1; then``` on fait un if. ```! command -v "$cmd"``` on vérifie donc si la commande exsite cependant ! Grâce "!", on inverse le résulthat donc le if devient vrai seulement si la commande n'est pas dans le system. pour finir on fait ```>/dev/null 2>&1``` pour éviter d'avoir les messages qui soit erreurs et standards
+```missing+=("${packages[$cmd]}")```, puis après avoir vérifier si la commande est bien absente du system. On la rajoute dans le tableau missing.
+et pour finir, on fait un echo pour avertir l'utilisateur des commandes absentes. 
+
+
 ```
 # Installations des paquets manquants si nécessaire
 if [ ${#missing[@]} -eq 0 ]; then
     echo "Toutes les dépendances sont déjà installées."
+    exit
 else
     echo "Les paquets suivants vont être installés : ${missing[*]}"
 fi
 ```
+ici c'est un simple if qui permet de savoir ce qu'on fait si. Le tableau missing est vide ou non. si il est vide, tout est déjà installer donc on exit car pas besoin de continuer. 
+Cependant si c'est pas le cas, on dit à l'utilisateur ce qui va être installer. 
+
 ```
 
 sudo apt update
@@ -79,6 +95,7 @@ sudo apt install -y "${missing[@]}"
 echo "Installation terminée."
 
 ```
+Les commandes basiques pour installer ce qu'ils manquent mais aussi prévient l'utilisateur quand l'installation est terminer. 
 
 ## progragmme_final.sh
 
