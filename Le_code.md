@@ -41,6 +41,18 @@ packages=(
     ["pdfinfo"]="poppler-utils"
 )
 ```
+```declare -A``` permet de créer un tableau associatif en bash. Un tableau associatif stocke des paires clé/valeur plutôt que des indices numériques classiques.
+```packages``` est le nom du dis tableau. 
+
+Ensuite, on définie le talbeau comme : 
+
+| Élément dans le code          | Clé (key) | Valeur (value)  | Rôle dans le script                                                                                                            |
+| ----------------------------- | --------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `["pdftk"]="pdftk"`           | `pdftk`   | `pdftk`         | La clé `pdftk` sert à vérifier si la commande existe (`command -v pdftk`). La valeur `pdftk` est le nom du paquet à installer. |
+| `["pdfgrep"]="pdfgrep"`       | `pdfgrep` | `pdfgrep`       | Même logique : clé = commande, valeur = paquet.                                                                                |
+| `["pdfinfo"]="poppler-utils"` | `pdfinfo` | `poppler-utils` | Ici la clé `pdfinfo` est la commande à tester. La valeur `poppler-utils` est le paquet qui contient `pdfinfo`.                 |
+
+
 ```
 missing=()
 
