@@ -15,13 +15,7 @@ Le 30 décembre 2017, Marc Vinyals développe un pdftk-java qui est un portage d
 
 ## À quoi ça sert ?
 
-PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion de pdf, la séparation, la sécurité, la compression et d'autre operation qu'on vera plus tard dans le point suivant. 
-
-## Les commandes : 
-
-#### Concaténation (fusion) 
-
-#### Extraction 
+PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion de pdf, la séparation, la sécurité, la compression et d'autre operation qu'on vera plus tard dans le markdown "Le_code". 
 
 ## Les sources utiliser : 
 
@@ -30,3 +24,4 @@ PDFTK permet de nombreuse opérations par rapport au pdf. Que sa soit la fusion 
 - https://debian-facile.org/doc:editeurs:pdftk
 - https://fr.wikipedia.org/wiki/PDFtk
 - https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/
+
