@@ -15,6 +15,6 @@ Dans le dêpot, il existe les programmes suivant :
 - programme_extraction.sh
 - programme_final.sh
 
-Pour éviter d'être répétitif, je vais seulement documenter le setup.sh et programme_final.sh. Car tout simplement, le programme_final.sh est le programme avec toutes les
-demandes réaliser et donc bien plus complet que le programme_extratction.sh qui a seulement la première fonctionaliter terminer. 
+Pour éviter d'être répétitif, je vais seulement documenter le setup.sh et programme_final.sh. Car tout simplement, le programme_final.sh est le programme avec toutes les demandes réaliser et donc bien plus complet que le  programme_extratction.sh qui a seulement la première fonctionaliter terminer. 
+
 
