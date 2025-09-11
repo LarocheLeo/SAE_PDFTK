@@ -2,34 +2,33 @@
 
 ## Mise en contexte
 
-On veut un script bash qui puisse extraire une page ou un nombre de page voulu dans un ou plusieurs pdf et qui ressort seulement un seul pdf après la manipulation. 
-En plus de cette fonctionalité, il faudrai pouvoir extraire les pages pas par le numéro de la page. Mais par rapport à des mots clés. 
+On veut un script bash qui puisse extraire une page ou un nombre de pages voulu dans un ou plusieurs pdf et qui ressort seulement un seul pdf après la manipulation. 
+En plus de cette fonctionnalité, il faudrait pouvoir extraire les pages pas par le numéro de la page. Mais par rapport à des mots-clés.  
 
 ## Le codage
 
-Pour répondre au besoin, j'ai réaliser plusieurs programmes qui permet de donner une solution à cette problèmatique. 
+Pour répondre au besoin, j'ai réalisé plusieurs programmes qui permettent de donner une solution à cette problématique. 
 
-Dans le dêpot, il existe les programmes suivant :
+Dans le dépôt, il existe les programmes suivants :
 
 - Setup.sh
 - programme_extraction.sh
 - programme_final.sh
 
-Pour éviter d'être répétitif, je vais seulement documenter le setup.sh et programme_final.sh. Car tout simplement, le programme_final.sh est le programme avec toutes les demandes réaliser et donc bien plus complet que le  programme_extratction.sh qui a seulement la première fonctionaliter terminer. 
+Pour éviter d'être répétitif, je vais seulement documenter le setup.sh et programme_final.sh. Car tout simplement, le programme_final.sh est le programme avec toutes les demandes réalisées et donc bien plus complet que le  programme_extratction.sh qui a seulement la première fonctionnalité terminée. 
 
 ## Setup.sh 
 
 ### Rôle
 
-Setup.sh permet de vérifier si les paquets qui sont vitale pour notre programme principal sont belle et bien, installer sinon il les installeras.
+Setup.sh permet de vérifier si les paquets qui sont vitaux pour notre programme principal sont bel et bien installés, sinon il les installera.
 
 ### Code 
 
 ```
 #!/bin/bash
 ```
-Cette ligne permet au system de lançer le script en bash. Il est dans tous les scripts bash. 
-
+Cette ligne permet au système de lancer le script en Bash. Il est dans tous les scripts bash. 
 ```
 echo "=== Vérification des dépendances pour le programme PDF ==="
 
@@ -41,10 +40,10 @@ packages=(
     ["pdfinfo"]="poppler-utils"
 )
 ```
-```declare -A``` permet de créer un tableau associatif en bash. Un tableau associatif stocke des paires clé/valeur plutôt que des indices numériques classiques.
-```packages``` est le nom du dis tableau. 
+```declare -A``` permet de créer un tableau associatif en Bash. Un tableau associatif stocke des paires clé/valeur plutôt que des indices numériques classiques.
+```packages``` est le nom du dit tableau. 
 
-Ensuite, on définie le talbeau comme : 
+Ensuite, on définit le tableau comme : 
 
 | Élément dans le code          | Clé (key) | Valeur (value)  | Rôle dans le script                                                                                                            |
 | ----------------------------- | --------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -53,7 +52,7 @@ Ensuite, on définie le talbeau comme :
 | `["pdfinfo"]="poppler-utils"` | `pdfinfo` | `poppler-utils` | Ici la clé `pdfinfo` est la commande à tester. La valeur `poppler-utils` est le paquet qui contient `pdfinfo`.                 |
 
 
-Mais ? à quoi sert pdfgrep et le pdfinfo ? ces derniers sont utiliser dans le programme principal donc il sera plus détailler par la suite. Mais pour expliquer en quelque ligne : 
+Mais à quoi servent pdfgrep et pdfinfo ? Ces derniers sont utilisés dans le programme principal, donc ils seront plus détaillés par la suite. Mais pour expliquer en quelques lignes : 
 
 - `pdfinfo` : récupère les informations d’un PDF, notamment le nombre total de pages, pour vérifier que les pages demandées existent avant extraction.
 - `pdfgrep` : cherche un mot-clé dans un PDF et retourne les numéros de pages où il apparaît, permettant d’extraire automatiquement ces pages.
@@ -69,11 +68,10 @@ for cmd in "${!packages[@]}"; do
     fi
 done
 ```
-```missing=()``` on créer un talbeau qui nous permettra de mettre tout les paquets manquants détécter lors de la vérification. 
-```for cmd in "${!packages[@]}"; do``` On parcours toutes les clés du tableau associatif de packages défini plutôt. ```"${!packages[@]}"``` permet de retourner toutes les clés du tableau. Puis ```cmd``` prend le reler pour chaque commande vérifier. 
-```if ! command -v "$cmd" >/dev/null 2>&1; then``` on fait un if. ```! command -v "$cmd"``` on vérifie donc si la commande exsite cependant ! Grâce "!", on inverse le résulthat donc le if devient vrai seulement si la commande n'est pas dans le system. pour finir on fait ```>/dev/null 2>&1``` pour éviter d'avoir les messages qui soit erreurs et standards
-```missing+=("${packages[$cmd]}")```, puis après avoir vérifier si la commande est bien absente du system. On la rajoute dans le tableau missing.
-et pour finir, on fait un echo pour avertir l'utilisateur des commandes absentes. 
+```missing=()``` On crée un tableau qui nous permettra de mettre tous les paquets manquants détectés lors de la vérification. 
+```for cmd in "${!packages[@]}"; do``` On parcourt toutes les clés du tableau associatif de packages défini plutôt. ```"${!packages[@]}"``` permet de retourner toutes les clés du tableau. Puis ```cmd``` prend le relais pour chaque commande à vérifier. 
+```if ! command -v "$cmd" >/dev/null 2>&1; then``` on fait un if. ```! command -v "$cmd"``` On vérifie donc si la commande existe cependant ! Grâce "!", on inverse le résultat, donc le if devient vrai seulement si la commande n'est pas dans le système. Pour finir, on fait ```>/dev/null 2>&1``` pour éviter d'avoir les messages qui soient erreurs et standards
+```missing+=("${packages[$cmd]}")```, puis après avoir vérifié si la commande est bien absente du système. On la rajoute dans le tableau missing.et pour finir, on fait un écho pour avertir l'utilisateur des commandes absentes. 
 
 
 ```
@@ -110,7 +108,7 @@ programme_final est la solution de la demande par rapport au pdf, il permet d'ex
 
 ```
 
-Cette ligne permet au system de lançer le script en bash. Il est dans tous les scripts bash. 
+Cette ligne permet au système de lancer le script en Bash. Il est dans tous les scripts bash. 
 
 ```
 # Liste des paquets/commandes nécessaires
@@ -132,7 +130,7 @@ for cmd in "${!packages[@]}"; do
     fi
 done
 ```
-Cette partie fait exactement, comme ce qui est présenter dans le point Setup.sh. Cependant au lieu d'installer, elle vérifie si tout est bien présent pour que le programme puisse travailler dans les meilleurs conditions. Si c'est pas le cas, le script s'arrête et demande à l'utilisateur de lancer le setup.sh pour installer la ou les commandes manquantes. 
+Cette partie fait exactement comme ce qui est présenté dans le point Setup.sh. Cependant, au lieu d'installer, elle vérifie si tout est bien présent pour que le programme puisse travailler dans les meilleures conditions. Si c'est pas le cas, le script s'arrête et demande à l'utilisateur de lancer le setup.sh pour installer la ou les commandes manquantes. 
 
 ```
 # Demander les fichiers PDF
@@ -145,9 +143,7 @@ read -p "Voulez-vous extraire par (p)ages ou par (m)ot-clé ? [p/m] : " mode
 read -p "Comment se nommera le fichier final ? " pdf_final
 ```
 
-Ici, c'est l'interaction basique avec l'utilisateur qui seront important pour la suite. on demande quels pdf l'utilisateur veut utiliser, soit certains et donc il le présice ou soit tout les pdfs ou se trouve le script. 
-On demande ensuite quel méthode d'extraction l'utilisateur veux, soit en indicant les pages ou soit avec un mot clé. 
-Pour finir, on demande simplement a l'utilisateur de donner un nom pour le pdf qui aura tout les informations extraites.
+Ici, c'est l'interaction basique avec l'utilisateur qui sera importante pour la suite. On demande quels PDF l'utilisateur veut utiliser, soit certains et donc il le précise, ou soit tous les PDF où se trouve le script. On demande ensuite quelle méthode d'extraction l'utilisateur veut, soit en indiquant les pages, soit avec un mot clé. Pour finir, on demande simplement à l'utilisateur de donner un nom pour le PDF qui aura toutes les informations extraites.
 
 ```
 # Si l'utilisateur veut tous les PDFs du dossier
@@ -157,7 +153,7 @@ else
     pdfs=( "${input_files[@]}" )
 fi
 ```
-Un simple if, si l'utilisateur a dit "all", alors la variable pdfs sera remplie de tout les pdfs du dossier comme indoiquer avec : ``` pdfs=( *.pdf )```. Cependant, si c'est pas le cas. On utilise la liste renseigner par l'utilisateur. 
+Un simple if, si l'utilisateur a dit "all", alors la variable pdfs sera remplie de tous les pdfs du dossier comme indiqué avec : ``` pdfs=( *.pdf )```. Cependant, si c'est pas le cas. On utilise la liste renseignée par l'utilisateur. 
 
 ```
 # Vérifier l'extension du fichier final
@@ -165,13 +161,14 @@ if [[ "$pdf_final" != *.pdf ]]; then
     pdf_final="${pdf_final}.pdf"
 fi
 ```
-Petite fonction par rapport au nom donner par l'utilisateur. Car le fichier final, donc la ou va être toutes les informations extraites. Doit être en .pdf, donc se if vérifie, si l'utilisateur à bien renseigner l'extension pour le fichier final. Donc le .pdf, si c'est pas le cas, on le rajoute.
+Petite fonction par rapport au nom donné par l'utilisateur. Car le fichier final, donc là où vont être toutes les informations extraites. Doit être en .pdf, donc ce if vérifie si l'utilisateur a bien renseigné l'extension pour le fichier final. Donc le .pdf, si c'est pas le cas, on le rajoute.
+
 
 ```
 # Tableau pour stocker les PDFs temporaires
 pdf_creer=()
 ```
-On créer un tableau qui va nous servire, comme dit à stocker les pdfs temporaires qui sont créer lors des extractions des pages par pdftk. 
+On crée un tableau qui va nous servir, comme dit, à stocker les PDF temporaires qui sont créés lors des extractions des pages par pdftk. 
 
 ```
 # Mode extraction par pages
@@ -203,25 +200,24 @@ if [[ "$mode" == "p" ]]; then
         done
 ```
 
-```if [[ "$mode" == "p" ]];``` then si l'utilisateur choisi l'option P qui représente l'extaction en précisiant les pages. Alors on demandera à l'utilisateur quelles pages, il veut extraire en lui donnant un exemple. 
-```for pdf_input in "${pdfs[@]}"; do``` on prend un par un chaque fichier sélectionner par l'utilisateur.
+```if [[ "$mode" == "p" ]]; then``` si l'utilisateur choisit l'option P qui représente l'extraction en précisant les pages. Alors on demandera à l'utilisateur quelles pages il veut extraire en lui donnant un exemple. 
+```for pdf_input in "${pdfs[@]}"; do``` On prend un par un chaque fichier sélectionné par l'utilisateur.
 
 ```total_pages=$(pdfinfo "$pdf_input" 2>/dev/null | grep "Pages:" | awk '{print $2}')``` 
 
-Voici la seul utilisation de pdfinfo. Pdfinfo va permettre de récuperer le numero pages de chaque pdfs. C'est sortie sont envoyer vers null pour éviter d'encombrer le terminal de l'utilisateur. Mais pourquoi utiliser pdfinfo, juste pour récuperer le numero de pages ? tous simple, si l'utilisateur veut récuperer sur deux pdf la page 2 à 5. Sur l'un des pdfs, il aura 6 pages donc cela passera. Cependant du le second, il n'y a que 4 pagges. Sa va créer une erreur car pdftk ne peut pas récuperer de pages qui n'existe pas. Donc récupèrer le nombre de page va nous permettre de regler ce probleme plus loin dans le programme.
+Voici la seule utilisation de pdfinfo. Pdfinfo va permettre de récupérer le numéro de pages de chaque pdf. Les sorties sont envoyées vers null pour éviter d'encombrer le terminal de l'utilisateur. Mais pourquoi utiliser pdfinfo, juste pour récupérer le numéro de pages ? Tout simple, si l'utilisateur veut récupérer sur deux PDF la page 2 à 5. Sur l'un des PDF, il y aura 6 pages, donc cela passera. Cependant, du second, il n'y a que 4 pages. Ça va créer une erreur car pdftk ne peut pas récupérer de pages qui n'existent pas. Donc récupérer le nombre de pages va nous permettre de régler ce problème plus loin dans le programme.
 
-```adjusted_pages="",``` on créer une variable vide ou on mettra uniquement les pages/plages valides à extraire.
-```for part in $pages; do``` se for permet de regarder, l'entrer que l'utilisateur a mmis.
-```if [[ "$part" =~ ^([0-9]+)-([0-9]+)$ ]]; then``` si dans l'entrer, l'utilisateur a mis une plage, on vérifie si elle est valides. Si elle contient bien un numero, un tirer et un autre numero coller. Si, on remplis cette condition. Nous somme dans une plage.  $part est tout expression régulière car elle contient la plage s'il y en à une.
+```adjusted_pages="",``` On crée une variable vide où on mettra uniquement les pages/plages valides à extraire.
+```for part in $pages; do``` se for permet de regarder l'entrée que l'utilisateur a mise.
+```if [[ "$part" =~ ^([0-9]+)-([0-9]+)$ ]]; then``` Si dans l'entrée, l'utilisateur a mis une plage, on vérifie si elle est valide. Si elle contient bien un numéro, un tiret et un autre numéro collé. Si, on remplit cette condition. Nous sommes dans une plage.   $part est toute expression régulière car elle contient la plage s'il y en a une.
 
-```start=${BASH_REMATCH[1]}``` et ```end=${BASH_REMATCH[2]}``` BASH_REMATCH contient les parties capturées par l’expression régulière. 1 et 2, sont le début et la fin d'une plage. 
-
+```start=${BASH_REMATCH[1]}``` et ```end=${BASH_REMATCH[2]}``` BASH_REMATCH contient les parties capturées par l’expression régulière. 1 et 2 sont le début et la fin d'une plage. 
 ```
 if (( end > total_pages )); then
     end=$total_pages
 fi
 ```
-voila à quoi sert pdfinfo en pratique. Car si, on le met pas, on aura un erreur disant qu'on à pas pu extraire la page car la plage n'était pas bonne. Comme mon exemples avec les deux pdfs. Mais ! grâce au faite qu'on récupère le nombre total de page dans les pdfs avec pdfinfo, on peut remplacer la fin de la plage par le nombre maximun de page identifier. Donc au lieux d'avoir une erreur et de ne pas pouvoir extraire les pages. On aura les pages 2 à 5 de mon pdf de 6 pages vu précedement mais aussi les pages 2 à 4 de mon pdf de 4 pages, on à ajuster la fin de la plage avec le nombre totale de page récuperer par pdfinfo.  
+Voilà à quoi sert pdfinfo en pratique. Car si on le met pas, on aura une erreur disant qu'on a pas pu extraire la page car la plage n'était pas bonne. Comme mon exemple avec les deux PDF. Mais ! Grâce au fait qu'on récupère le nombre total de pages dans les PDF avec pdfinfo, on peut remplacer la fin de la plage par le nombre maximum de pages identifiées. Donc au lieu d'avoir une erreur et de ne pas pouvoir extraire les pages. On aura les pages 2 à 5 de mon pdf de 6 pages vues précédemment, mais aussi les pages 2 à 4 de mon pdf de 4 pages. On a ajusté la fin de la plage avec le nombre total de pages récupérées par pdfinfo.  
 
 
 ```
@@ -231,7 +227,7 @@ if (( start <= end && start <= total_pages )); then
 fi
 ```
 
-Pour être sur que la plage reste valide dans tout les cas, on la test avec ce fonction if. Qui va vérifier si le début(start) est bien plus petit que la fin(end) ou le nombre de page total. Puis on rajoute à la variable adjusted_pages.
+Pour être sûr que la plage reste valide dans tous les cas, on la teste avec cette fonction if. Qui va vérifier si le début (start) est bien plus petit que la fin (end) ou le nombre de pages total. Puis on rajoute à la variable adjusted_pages.
 
 ```
 # Page unique
@@ -240,7 +236,7 @@ if (( part <= total_pages )); then
 fi
 ```
 
-Puis, si c'est pas une plage mais une page simple donc un numero, on vérife que cette dernière existe dans le pdf. Et on le rajoute dans la vairable. 
+Puis, si c'est pas une plage mais une page simple, donc un numéro, on vérifie que cette dernière existe dans le pdf. Et on le rajoute dans la variable. 
 
 ```
         if [[ -z "$adjusted_pages" ]]; then
@@ -248,15 +244,15 @@ Puis, si c'est pas une plage mais une page simple donc un numero, on vérife que
             continue
         fi
 ```
-Test la variable pour savoir si elle est vide. Puis si aucune page que l'utilisateur à renseigner correspont au pdf alors on affiche le message suivant qui prévient l'utilisateur qu'il na pas trouver la page dans le pdf et continue avec les autres pdfs. 
+Teste la variable pour savoir si elle est vide. Puis si aucune page que l'utilisateur a renseignée ne correspond au pdf, alors on affiche le message suivant qui prévient l'utilisateur qu'il na pas trouvé la page dans le pdf et continue avec les autres pdf. 
 
 ```
         pdf_output="temp_${pdf_input%.pdf}.pdf"
         pdftk "$pdf_input" cat $adjusted_pages output "$pdf_output" 2>/dev/null
 ```
 
-```pdf_output="temp_${pdf_input%.pdf}.pdf"``` on renome le nom du fichier car il vont nous servir de ficher temporaire avant la fusion. 
-```pdftk "$pdf_input" cat $adjusted_pages output "$pdf_output" 2>/dev/null``` puis avec pdftk, on viens extraire les pages qu'on souhaites et qui vont être inscérer dans les pdfs qu'on à renomer.  on fait une redirection pour éviter tout affichage de bug ou autre qui génerer le terminal de l'utilisateur. 
+```pdf_output="temp_${pdf_input%.pdf}.pdf"``` On renomme le nom du fichier car ils vont nous servir de fichiers temporaires avant la fusion. 
+```pdftk "$pdf_input" cat $adjusted_pages output "$pdf_output" 2>/dev/null``` Puis avec pdftk, on vient extraire les pages qu'on souhaite et qui vont être insérées dans les pdf qu'on a renommés.   On fait une redirection pour éviter tout affichage de bug ou autre qui gênerait le terminal de l'utilisateur. 
 
 ```
         if [[ -f "$pdf_output" ]]; then
@@ -269,7 +265,7 @@ Test la variable pour savoir si elle est vide. Puis si aucune page que l'utilisa
 fi
 ```
 
-Puis on, vérifie si tout c'est bien dérouller. Si le fichier temporaire c'est bien créer. sinon on affiche une erreur. Voici le dernier, segment de code qui termine l'option P. 
+Puis on vérifie si tout s'est bien déroulé. Si le fichier temporaire s'est bien créé. Sinon on affiche une erreur. Voici le dernier segment de code qui termine l'option P. 
 
 
 ```
@@ -285,10 +281,9 @@ if [[ "$mode" == "m" ]]; then
     fi
 ```
 
-Maintenant, on va parler de l'option M qui va extraire les pages par mot-clé. 
-
-Déjà, si l'option est choisi. On demande le mot clé que l'utilisateur recherche et on demande si, il veut ignorer ou non les majuscules/minucusles. 
-Si, l'utilisateur choisi d'ignorer la différence de lettre. Alors on rajoutera l'arguement -i qui permettra de ne pas faire la diférence entre majuscules ou minuscules. Si c'est l'inverse, on fera la différence.
+Maintenant, on va parler de l'option M qui va extraire les pages par mot-clé.
+Déjà, si l'option est choisie. On demande le mot-clé que l'utilisateur recherche et on demande si, oui ou non, il veut ignorer les majuscules/minuscules. 
+Si l'utilisateur choisit d'ignorer la différence de lettre. Alors on rajoutera l'argument –i qui permettra de ne pas faire la différence entre majuscules ou minuscules. Si c'est l'inverse, on fera la différence.
 
 ```
     for pdf_input in "${pdfs[@]}"; do
@@ -297,12 +292,12 @@ Si, l'utilisateur choisi d'ignorer la différence de lettre. Alors on rajoutera 
         pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)
 ```
 
-```for pdf_input in "${pdfs[@]}"; do``` boucle for pour regarder dans tout les fichiers pdfs. 
-```echo "Recherche du mot-clé '$keyword' dans $pdf_input..."``` on prévient ensuite l'utilisateur de quel mot clé, on cherche dans quel pdf. 
-```pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)``` puis on utilise pdfgrep, qui permet donc de chercher le mot-clé dans le fichier pdf. On affichie le numéro de page ou il apparait avec "-n". Si nous avions le grep_option avec "-i", on ignorer les majuscules et minuscules sinon, on fait la différence. on fait une redirection pour éviter les erreurs ou les messages parasite dans le terminal.
-```cut -d: -f1 ``` cette option permet de garder seulement les numéros de pages. 
+```for pdf_input in "${pdfs[@]}"; do``` Boucle for pour regarder dans tous les fichiers PDF. 
+```echo "Recherche du mot-clé '$keyword' dans $pdf_input..."``` On prévient ensuite l'utilisateur de quel mot-clé on cherche dans quel PDF. 
+```pages=$(pdfgrep -n $grep_option "$keyword" "$pdf_input" 2>/dev/null | cut -d: -f1 | sort -n | uniq)``` Puis on utilise pdfgrep, qui permet donc de chercher le mot-clé dans le fichier pdf. On affiche le numéro de page où il apparait avec "-n". Si nous avions le grep_option avec "-i", on ignorerait les majuscules et minuscules, sinon, on fait la différence. On fait une redirection pour éviter les erreurs ou les messages parasites dans le terminal.
+```cut -d: -f1 ``` Cette option permet de garder seulement les numéros de pages. 
 ```sort -n``` puis avec cette option on trie les numéros de pages dans l’ordre croissant.
-```uniq``` puis avec cette option on supprime les doublons.
+```uniq``` Puis avec cette option on supprime les doublons.
 
 
 ```
@@ -312,7 +307,7 @@ Si, l'utilisateur choisi d'ignorer la différence de lettre. Alors on rajoutera 
             continue
         fi
 ```
-On teste la varialbe, pour savoir si elle est vide. si c'est le cas, on dit alors que nous avions rien trouver. 
+On teste la variable, pour savoir si elle est vide. Si c'est le cas, on dit alors que nous n'avons rien trouvé. 
 
 ```
         pdf_output="temp_${pdf_input%.pdf}.pdf"
@@ -325,7 +320,7 @@ On teste la varialbe, pour savoir si elle est vide. si c'est le cas, on dit alor
 fi
 ```
 
-Puis comme dans l'option P, on vient renommer les pdfs pour enfaire des pdfs temporaires ou on mettra les pages extraites. Puis si tout c'est bien dérouler, on viens prévenir l'utilisateur. 
+Puis comme dans l'option P, on vient renommer les PDF pour en faire des PDF temporaires où on mettra les pages extraites. Puis si tout s'est bien déroulé, on vient prévenir l'utilisateur. 
 
 ```
 # Fusionner les fichiers extraits
@@ -342,18 +337,19 @@ else
 fi
 ```
 
-```if [[ ${#pdf_creer[@]} -gt 0 ]]; then``` on regarde s'il y a au moins 1 fichier créer par rapport a l'extraction des pdfs via l'option p ou m/
-```pdftk "${pdf_creer[@]}" cat output "$pdf_final" 2>/dev/null``` puis avec cette commande, on va mettre chaque pdf temporaire créer dans le pdf final dont l'utilisateur a nommer au tout début. Et pour eviter les messages parasites, on fait une redirection des erreurs. 
+```if [[ ${#pdf_creer[@]} -gt 0 ]]; then``` On regarde s'il y a au moins 1 fichier créé par rapport à l'extraction des PDF via l'option p ou m.
+```pdftk "${pdf_creer[@]}" cat output "$pdf_final" 2>/dev/null``` Puis avec cette commande, on va mettre chaque pdf temporaire créé dans le pdf final que l'utilisateur a nommé au tout début. Et pour éviter les messages parasites, on fait une redirection des erreurs. 
 
 ```
 echo "Création du fichier en cours..."
 echo "Fichier final créé : $pdf_final"  
 ```
-Puis on informe l'utilisateur que sont fichier final c'est créer.
+Puis on informe l'utilisateur que son fichier final s'est créé.
+
 ```
 for f in "${pdf_creer[@]}"; do 
     [[ -f "$f" ]] && rm "$f"
 ```
-Et si tout c'est bien dérouler, on viens supprimer les fichiers temporaire générer par l'extraction des pages. Car ces derniers prenent de la places inutilement vu qu'on les fussionnes à la fin.
+Et si tout s'est bien déroulé, on vient supprimer les fichiers temporaires générés par l'extraction des pages. Car ces derniers prennent de la place inutilement vu qu'on les fusionne à la fin.
 
-```echo "Aucun fichier n’a été généré (vérifiez vos mots-clés ou pages)."``` de plus. si il na pas pu créer le ficher par manque de pdf ou autre le script le dira à l'utilisateur avec se message. 
+```echo "Aucun fichier n’a été généré (vérifiez vos mots-clés ou pages)."``` S'il na pas pu créer le fichier par manque de pdf ou autre, le script le dira à l'utilisateur avec ce message. 
