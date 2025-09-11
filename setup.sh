@@ -12,7 +12,7 @@ packages=(
 
 missing=()
 
-# Vérifier chaque commande
+# Vérification de chaque commande
 for cmd in "${!packages[@]}"; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         missing+=("${packages[$cmd]}")
@@ -20,21 +20,14 @@ for cmd in "${!packages[@]}"; do
     fi
 done
 
-# Installer les paquets manquants si nécessaire
+# Installations des paquets manquants si nécessaire
 if [ ${#missing[@]} -eq 0 ]; then
     echo "Toutes les dépendances sont déjà installées."
 else
     echo "Les paquets suivants vont être installés : ${missing[*]}"
-    
-    # Demander confirmation
-    read -p "Voulez-vous continuer avec l'installation ? [o/N] : " choice
-    if [[ "$choice" =~ ^[oO]$ ]]; then
-        sudo apt update
-        sudo apt install -y "${missing[@]}"
-        echo "Installation terminée."
-    else
-        echo "Installation annulée. Le programme ne fonctionnera pas sans ces paquets."
-        exit 1
-    fi
 fi
+
+sudo apt update
+sudo apt install -y "${missing[@]}"
+echo "Installation terminée."
 
